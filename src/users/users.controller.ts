@@ -13,6 +13,7 @@ export class UsersController {
   @Get()
   async findAll(){
     const allUsers = await this.usersService.findAll()
+    
     return {
       code: 200,
       message: "berhasil ambil data users",
