@@ -1,0 +1,130 @@
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["referentialIntegrity"]
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Example {
+  id String @id
+}
+
+model guru {
+  id           String   @id
+  nama         String   @db.VarChar(255)
+  nip          String   @unique @db.VarChar(255)
+  jenisKelamin String   @db.VarChar(255)
+  fotoProfile  String?  @db.Text
+  waliKelas    Boolean  @default(false)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime
+  email        String   @unique @db.VarChar(255)
+  jenisGuru    String   @db.VarChar(255)
+  userID       String   @unique
+  namaKelas    String?  @db.VarChar(255)
+}
+
+model kelas {
+  id        String   @id
+  name      String   @db.VarChar(255)
+  createdAt DateTime @default(now())
+  updatedAt DateTime
+}
+
+model lab {
+  id        String   @id
+  type      String   @db.VarChar(255)
+  deskripsi String   @db.VarChar(255)
+  start_jam String   @db.VarChar(255)
+  end_jam   String   @db.VarChar(255)
+  tanggal   String   @db.VarChar(255)
+  status    String   @db.VarChar(255)
+  createdAt DateTime @default(now())
+  updatedAt DateTime
+  guruID    String
+}
+
+model panggil_ortu {
+  id         String   @id
+  no_surat   String   @db.VarChar(255)
+  perihal    String   @db.VarChar(255)
+  nama_ortu  String   @db.VarChar(255)
+  wali_kelas String   @db.VarChar(255)
+  nip_wali   String   @db.VarChar(255)
+  nama_bk    String   @db.VarChar(255)
+  nip_bk     String   @db.VarChar(255)
+  tanggal    DateTime
+  waktu      String   @db.VarChar(255)
+  tempat     String   @db.VarChar(255)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime
+  siswaID    String
+}
+
+model pelanggaran {
+  id        String   @id
+  type      String   @db.VarChar(255)
+  deskripsi String   @db.Text
+  point     Int
+  pemberi   String   @db.VarChar(255)
+  createdAt DateTime @default(now())
+  updatedAt DateTime
+  siswaID   String
+}
+
+model periode {
+  id        String   @id
+  periode   String   @unique @db.VarChar(255)
+  createdAt DateTime @default(now())
+  updatedAt DateTime
+}
+
+model siswa {
+  id           String   @id
+  nama         String   @db.VarChar(255)
+  nis          String   @unique @db.VarChar(255)
+  email        String   @unique @db.VarChar(255)
+  jenisKelamin String   @db.VarChar(255)
+  fotoProfile  String?  @db.Text
+  kelas        String?  @db.VarChar(255)
+  userID       String   @unique
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime
+}
+
+model tindaklanjut {
+  id         String   @id
+  type       String   @db.VarChar(255)
+  deskripsi  String   @db.Text
+  penindak   String   @db.VarChar(255)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime
+  siswaID    String
+  penanganan String   @db.Text
+  tanggal    DateTime
+  tindakan   String   @db.Text
+}
+
+model users {
+  id         String      @id
+  name       String      @db.VarChar(255)
+  email      String      @unique
+  nomorInduk String      @unique
+  password   String
+  role       users_role? @default(siswa)
+  createdAt  DateTime    @default(now())
+  updatedAt  DateTime
+}
+
+enum users_role {
+  siswa
+  admin
+  perpus
+  wali
+  bk
+  guru
+  lab
+}
